@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ebeef2">
+    <title>欢迎来到 Sabitsuki</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <link href="/static/css/abc.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/static/img/favicon.png" type="image/png">
+    <link rel="icon" href="/static/img/favicon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/static/img/app.png">
+    <link rel="apple-touch-icon-precomposed" href="./static/img/app.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="msapplication-TileColor" content="ebeef2">
+    <meta name="msapplication-TileImage" content="/static/img/app.png">
+    <meta name="theme-color" content="#ebeef2">
+    <meta property="og:title" content="Note.ms">
+    <meta property="og:site_name" content="Note.ms">
+    <meta property="og:description" content="Take notes with simplicity">
+    <meta property="og:image" content="/static/img/app.png">
+    <style>
+        input[type=text] {
+            height: 30px;
+            width: 300px;
+            border-radius: 0;
+            border: 2px solid #ff899999;
+            caret-color: #ff899999;
+            color: #333;
+            padding: 0 6px;
+            background: #fff;
+            font-size: inherit;
+            font-family: inherit;
+            outline: none;
+        }
+        input[type=button] {
+            border-radius: 0;
+            border: 2px solid #ff899999;
+            background: inherit;
+            color: #333;
+            font-size: 16px;
+            padding: 4px 8px;
+            margin-top: 20px;
+        }
+        input[type=button]:hover {
+            background: #ff899999;
+            color: #eee;
+        }
+        p {
+            font-size: 15px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="stack">
+        <div class="layer">
+            <div class="layer">
+                <div class="layer">
+                    <div class="content" style="display: flex; align-items: center; flex-direction: column;">
+                        <img src="/static/img/welcome.png" alt="Sabitsuki" style="width: 500px; height: 132px; margin-top: 10vh;" />
+                        <p style="font-size: 17px; color:#333;">
+                            您与Centzonmimixcoa网络的接口。
+                        </p>
+                        <form style="margin: 50px 0;">
+                            <label for="inputKey">命名空间</label>
+                            <input id="inputKey" type="text" name="inputKey">
+                            <input type="button" value="进入" id="buttonGoto">
+                        </form>
+                        <p>
+                            Centzonmimixcoa是Note.ms上的抽象层，旨在基于Note.ms提供多个命名空间，包含独立页面。
+                        </p>
+                        <p>
+                            所有数据均经过AES-256加密，即使拥有后端权限也难以发现用户的页面内容。
+                        </p>
+                        <p>
+                            由于设置Note需要大量加密运算，Centzonmimixcoa有原生的防大规模覆盖特性。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="flag"></div>
+    </div>
+    <pre class="print">
+    </pre>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.4.min.js"></script>
+    <script>
+        $("#buttonGoto").click(() => {
+            window.open("/" + $("#inputKey").val() + "?selector", "_self");
+        })
+    </script>
+
+
+</body>
+
+</html>
