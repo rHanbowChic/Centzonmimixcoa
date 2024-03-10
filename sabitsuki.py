@@ -13,7 +13,7 @@ import random  # 最好的模块
 import string
 import sys
 
-base_dir = '../Centzonmimixcoa111'
+base_dir = '.'
 if hasattr(sys, '_MEIPASS'):
     base_dir = path.join(sys._MEIPASS)
 
