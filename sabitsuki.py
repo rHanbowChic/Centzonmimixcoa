@@ -7,11 +7,16 @@ from flask import redirect
 from flask import Response
 from flaskext.markdown import Markdown
 from bs4 import BeautifulSoup
+from termcolor import colored
 from lugh_core import Lugh
 import platformdirs
 import random  # 最好的模块
 import string
+import logging
 import sys
+
+PORT = 15506
+APP_NAME = "Sabitsuki"
 
 base_dir = '.'
 if hasattr(sys, '_MEIPASS'):
@@ -41,9 +46,12 @@ else:
 
 l = Lugh(host=host, proxy=proxy)
 
-app = Flask("Sabitsuki", static_folder=path.join(base_dir, 'static'),
+app = Flask(APP_NAME, static_folder=path.join(base_dir, 'static'),
         template_folder=path.join(base_dir, 'templates'))
 Markdown(app)
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 VALID_TAGS = ['strong', 'em', 'p', 'ul', 'ol', 'li', 'b', 'i',
               'br', 'sub', 'sup', 'ruby', 'rt', 'rp', 'details', 'summary']
@@ -70,6 +78,7 @@ def page_get(key, page):
     if page.endswith(".md"):  # /example1.md
         page = page[0:-3]  # example1
         text = l.get_note(key, page)
+        print(f"{APP_NAME}: page_get - Key: {key}, Page: {page}")
         # 过滤可能的XSS
         text = sanitize_html(text)
 
@@ -82,6 +91,7 @@ def page_get(key, page):
             return render_template('note_md.html', key=key, page=page, text=text)
     else:
         text = l.get_note(key, page)
+        print(f"{APP_NAME}: page_get - Key: {key}, Page: {page}")
 
         is_text_request = request.args.get('text') is not None
         if (request.headers.get("User-Agent") is not None and (
@@ -99,21 +109,25 @@ def note_post(key, page):
         t = request.form.get("t")
         if t is not None:
             l.post_note(key, page, t)
+            print(f"{APP_NAME}: note_post - Key: {key}, Page: {page}")
     return ""
 
 @app.route("/<key>", methods=['GET'])
 def root_redirect(key):
     selector_mode = request.args.get('selector') is not None
     if selector_mode:
+        print(f"{APP_NAME}: root_redirect - Key: {key}, Selector")
         return render_template('page_selector.html', key=key)
     randword = ""
     for i in range(0, 4):
         randword += random.choice(string.ascii_lowercase)
+    print(f"{APP_NAME}: root_redirect - Key: {key}, Redirect: {randword}")
     return redirect(f"/{key}/{randword}", code=302)
 
 
 @app.route("/", methods=['GET'])
 def show_welcome():
+    print(f"{APP_NAME}: show_welcome")
     return render_template('welcome.html')
 
 
@@ -122,5 +136,21 @@ def error_500(error):
     return "500 Error. <a href='/'>Return to main page</a>"
 
 
+with app.app_context():
+    url = f"http://127.0.0.1:{PORT}"
+    print(f"Welcome to {APP_NAME}")
+    if sys.platform == 'win32':
+        from os import startfile
+        startfile(url)
+    elif sys.platform == 'darwin':
+        import subprocess
+        subprocess.Popen(['open', url])
+    else:
+        import subprocess
+        try:
+            subprocess.Popen(['xdg-open', url])
+        except OSError:
+            print (colored(f"{APP_NAME}: Your OS seems to have no GUI. Please open {url} in your browser manually.", "red"))
+
 if __name__ == "__main__":
-    app.run(port=5100)
+    app.run(port=PORT)

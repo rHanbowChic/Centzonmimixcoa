@@ -1,8 +1,10 @@
 import base64
 from libnotemsx import Notems
+from termcolor import colored
 from hashlib import pbkdf2_hmac, sha256
 from Crypto.Cipher import AES
 from Crypto import Random
+# **不要管这些混乱的代码** -- 实际上，Ect07自己都看不懂某些语句。
 
 class Lugh:
     def __init__(self, host="https://note.ms", proxy=""):
@@ -34,8 +36,8 @@ class Lugh:
         else:
             aes_digest = self.current_aes_digest
         aes_cipher = AESCipher(aes_digest)
-        encrypted_text = aes_cipher.encrypt(text.encode("utf=8").hex())
-        print(f"post {encrypted_text} to {target_page}")
+        encrypted_text = aes_cipher.encrypt(text.encode("utf-8").hex())
+        print(colored(f"lugh_core: POST {target_page} {encrypted_text.decode('utf-8')}","light_cyan"))
 
         self.n.post_note(target_page, encrypted_text.decode("utf-8"))
         return ""
@@ -50,15 +52,18 @@ class Lugh:
         target_page = page_digest.hex()[:24]
 
         encrypted_text = self.n.get_note(target_page)
-        print(f"get {encrypted_text} from {target_page}")
+        print(colored(f"lugh_core: GET {target_page} {encrypted_text}","light_blue"))
         if encrypted_text == "":
             text = ""
+            if self.current_page != page or self.current_key != key:
+                aes_digest = pbkdf2_hmac('sha256', page.encode("utf-8"),
+                                         self.salt_aes + key.encode("utf-8"), 1000000)
+                self.current_aes_digest = aes_digest
         else:
             if self.current_page != page or self.current_key != key:
                 aes_digest = pbkdf2_hmac('sha256', page.encode("utf-8"),
                                          self.salt_aes + key.encode("utf-8"), 1000000)
                 self.current_aes_digest = aes_digest
-
             else:
                 aes_digest = self.current_aes_digest
             aes_cipher = AESCipher(aes_digest)
