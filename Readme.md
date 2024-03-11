@@ -56,3 +56,5 @@ l.post_note("changeme","my_lovely_page","aha!")
 
 ## 备注
 * Centzonmimixcoa Shell与Sabitsuki的**配置文件**位于`%LOCALAPPDATA%\ect.fyi\ntms\`目录下（Windows）或`~/.local/share/ntms/`目录下（Linux）。可以手动修改这些文件来设置服务器主机名和代理。
+* “libnotemsx”在哪里？
+  * 由于涉及到自动化操作Note.ms的技术（这是目前争论的焦点），这一部分暂时不能开源。但是，可以使用公开PyPI上的模块“libnotems”实现相同的操作，只是速度较慢，内存占用较高。
