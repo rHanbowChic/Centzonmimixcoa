@@ -72,7 +72,7 @@ def run_interactive_shell():
 n = Lugh(host=host, proxy=proxy)
 
 if len(argv) < 3:
-    print("Centzonmimixcoa v1.0 Interactive Shell")
+    print("Centzonmimixcoa v1.0 Interactive Shell\n")
     run_interactive_shell()
 elif len(argv) == 3:
     key = argv[1]
